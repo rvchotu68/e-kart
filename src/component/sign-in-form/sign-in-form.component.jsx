@@ -4,8 +4,6 @@ import { useState } from "react";
 import Button from "../button/button.component";
 import {
   signInWithGooglePop,
-  signInWithGoogleRedirect,
-  createUserDocumentWithAuth,
   signInAuthUsingEmailAndPassword,
 } from "../../utils/firebase/firebase.utils";
 
@@ -45,9 +43,9 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     try {
-      const { user } = await signInWithGooglePop();
-      const userDocRef = await createUserDocumentWithAuth(user);
-      console.log(userDocRef);
+      await signInWithGooglePop();
+      // const userDocRef = await createUserDocumentWithAuth(user);
+      // console.log(userDocRef);
     } catch (err) {
       console.log(err);
     }

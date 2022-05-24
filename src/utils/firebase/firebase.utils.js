@@ -6,10 +6,12 @@ import {
   signInWithPopup,
   signInWithRedirect,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 
-import {getFirestore,doc,getDoc,setDoc} from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC3IiaSD-S55NCCMX-JstPoWSR760LHtd0",
@@ -28,8 +30,8 @@ const provider = new GoogleAuthProvider();
 // const githubAuthProvider = new GithubAuthProvider();
 
 provider.getCustomParameters({
-    prompt: "select_account"
-})
+  prompt: "select_account",
+});
 
 // githubAuthProvider.getCustomParameters({
 //     prompt: "select_account"
@@ -37,55 +39,53 @@ provider.getCustomParameters({
 
 const db = getFirestore(firebaseApp);
 
-export const createUserDocumentWithAuth = async (userAuth,otherData = {}) =>{
+export const createUserDocumentWithAuth = async (userAuth, otherData = {}) => {
+  const userDocRef = doc(db, "users", userAuth.uid);
+  console.log(userDocRef);
+  const userSnapShot = await getDoc(userDocRef);
+  console.log(userSnapShot);
 
-    const userDocRef = doc(db,"users",userAuth.uid);
-    console.log(userDocRef);
-    const userSnapShot = await getDoc(userDocRef);
-    console.log(userSnapShot);
-
-    if(!userSnapShot.exists())
-    {
-        const {displayName,email} = userAuth;
-        const createdAt = new Date();
-        try{
-            await setDoc(userDocRef,{
-                displayName,
-                email,
-                createdAt,
-                ...otherData
-            })
-        }
-        catch(err)
-        {
-            console.log(err);
-        }
+  if (!userSnapShot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    try {
+      await setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+        ...otherData,
+      });
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    return userDocRef;
-
-}
-
+  return userDocRef;
+};
 
 export const auth = getAuth(firebaseApp);
 console.log(auth);
 
-export const signInWithGooglePop = () => signInWithPopup(auth,provider);
+export const signInWithGooglePop = () => signInWithPopup(auth, provider);
 
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth,provider);
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, provider);
 
-export const createUserAuthUsingEmailAndPassword = async (email,password) =>{
-   
-    if( !email || !password) return;
-    
-   return  await createUserWithEmailAndPassword(auth,email,password);
+export const createUserAuthUsingEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
 
-}
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
 
-export const signInAuthUsingEmailAndPassword = async(email,password) =>{
+export const signInAuthUsingEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
 
-    if(!email || !password) return;
+  return await signInWithEmailAndPassword(auth, email, password);
+};
 
-    return await signInWithEmailAndPassword(auth,email,password);
-
-}
+export const onAuthStateChangedHandler = (callback) => {
+  onAuthStateChanged(auth, callback);
+};
+export const signOutHandler = async () => {
+  await signOut(auth);
+};
