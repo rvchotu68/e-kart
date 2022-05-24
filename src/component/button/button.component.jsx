@@ -1,9 +1,10 @@
-import { Children } from "react";
+// import { Children } from "react";
 import "./button.styles.scss"
 
 const BUTTON_TYPE_CLASSES = {
     google : 'google-sign-in',
-    inverted : 'inverted'
+    inverted : 'inverted',
+    reverse : 'inverted-reverse'
 }
 
 const Button = ({children,buttonType,...otherProps}) => {

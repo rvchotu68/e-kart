@@ -15,7 +15,9 @@
   cursor: pointer;
   display: flex;
   justify-content: center;
+  align-items: center;
   font-family: "Roboto Condensed", sans-serif;
+//   margin-right: 2rem;
 
   &:hover {
     background-color: white;
@@ -42,6 +44,18 @@
       background-color: black;
       color: white;
       border: none;
+    }
+  }
+
+  &.inverted-reverse{
+    background-color: black;
+    color: white;
+    border: none;
+
+    &:hover {
+      background-color: white;
+      color: black;
+      border: 1px solid black;
     }
   }
 }
