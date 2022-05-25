@@ -10,7 +10,7 @@ import { CartContext } from "../../context/cart.context";
 
 const Navigation = () => {
   const { currUser } = useContext(Context);
-  const {isCartActive} = useContext(CartContext);
+  const { isCartActive } = useContext(CartContext);
   return (
     <Fragment>
       <div className="navigation">
@@ -34,9 +34,7 @@ const Navigation = () => {
           )}
           <ShoppingCartIcon />
         </div>
-        {
-          isCartActive && <CartDropDown/>
-        }
+        {isCartActive && <CartDropDown />}
       </div>
       <Outlet />
     </Fragment>
