@@ -15,7 +15,7 @@ const UserContext = ({ children }) => {
 
   useEffect(  () => {
     const unsubscribe = onAuthStateChangedHandler(async (user) => {
-      console.log(user);
+      // console.log(user);
       if (user) await createUserDocumentWithAuth(user);
 
       setCurrUser(user);

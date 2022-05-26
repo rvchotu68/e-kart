@@ -11,7 +11,16 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC3IiaSD-S55NCCMX-JstPoWSR760LHtd0",
@@ -23,27 +32,46 @@ const firebaseConfig = {
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
-console.log(firebaseApp);
+// console.log(firebaseApp);
 
 const provider = new GoogleAuthProvider();
 
-// const githubAuthProvider = new GithubAuthProvider();
+const db = getFirestore(firebaseApp);
 
 provider.getCustomParameters({
   prompt: "select_account",
 });
 
-// githubAuthProvider.getCustomParameters({
-//     prompt: "select_account"
-// })
+export const addCollectionAndDocuments = async (collName, jsonData) => {
+  const collectionRef = await collection(db, collName);
+  const batch = writeBatch(db);
+  jsonData.forEach((data) => {
+    const docRef = doc(collectionRef, data.title.toLowerCase());
+    batch.set(docRef, data);
+  });
+  await batch.commit();
+  console.log("done");
+};
 
-const db = getFirestore(firebaseApp);
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = await collection(db, "categories");
+  const q = query(collectionRef);
+  const querySnapshot = await getDocs(q);
+  // console.log(querySnapshot.docs);
+  const categoryMap = querySnapshot.docs.reduce((preVale, docSnap) => {
+    const { title, items } = docSnap.data();
+    preVale[title.toLowerCase()] = items;
+    return preVale;
+  }, {});
+
+  return categoryMap;
+};
 
 export const createUserDocumentWithAuth = async (userAuth, otherData = {}) => {
   const userDocRef = doc(db, "users", userAuth.uid);
-  console.log(userDocRef);
+  // console.log(userDocRef);
   const userSnapShot = await getDoc(userDocRef);
-  console.log(userSnapShot);
+  // console.log(userSnapShot);
 
   if (!userSnapShot.exists()) {
     const { displayName, email } = userAuth;
@@ -64,7 +92,7 @@ export const createUserDocumentWithAuth = async (userAuth, otherData = {}) => {
 };
 
 export const auth = getAuth(firebaseApp);
-console.log(auth);
+// console.log(auth);
 
 export const signInWithGooglePop = () => signInWithPopup(auth, provider);
 

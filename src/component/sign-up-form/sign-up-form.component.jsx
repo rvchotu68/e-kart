@@ -1,4 +1,4 @@
-import "./sign-up-form.styles.scss";
+import  {SignUpFormContainer} from"./sign-up-form.styles.jsx";
 import { useState } from "react";
 import {
   createUserAuthUsingEmailAndPassword,
@@ -6,7 +6,7 @@ import {
 } from "../../utils/firebase/firebase.utils";
 
 import FormInput from "../form-input/form-input.component";
-import Button from "../button/button.component";
+import Button,{BUTTON_TYPE_CLASSES} from "../button/button.component";
 const defaultFormValues = {
   displayName: "",
   email: "",
@@ -47,7 +47,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="sign-up-container">
+    <SignUpFormContainer>
       <h2>Don't have an account?</h2>
       <span>Sign up with your email and password</span>
       <form onSubmit={submitHandler}>
@@ -87,9 +87,9 @@ const SignUpForm = () => {
           onChange={changeHandler}
           required
         />
-        <Button buttonType ='inverted' type="submit">Sign up</Button>
+        <Button buttonType ={BUTTON_TYPE_CLASSES.inverted} type="submit">Sign up</Button>
       </form>
-    </div>
+    </SignUpFormContainer>
   );
 };
 

@@ -1,7 +1,7 @@
-import "./sign-in-form.styles.scss";
+import {SignInFormContainer,ButtonsContainer} from "./sign-in-form.styles.jsx";
 import FormInput from "../form-input/form-input.component";
 import { useState } from "react";
-import Button from "../button/button.component";
+import Button,{BUTTON_TYPE_CLASSES} from "../button/button.component";
 import {
   signInWithGooglePop,
   signInAuthUsingEmailAndPassword,
@@ -53,7 +53,7 @@ const SignInForm = () => {
 
   console.log(formData);
   return (
-    <div className="sign-up-container">
+    <SignInFormContainer>
       <h2>I already Have an account</h2>
       <span>Sign in with your email password</span>
       <form onSubmit={submitHandler}>
@@ -75,16 +75,16 @@ const SignInForm = () => {
           onChange={changeHandler}
           required
         />
-        <div className="buttons-container">
-          <Button buttonType="reverse" type="submit">
+        <ButtonsContainer>
+          <Button buttonType={BUTTON_TYPE_CLASSES.base} type="submit">
             SIGN IN
           </Button>
-          <Button buttonType="google" type="button" onClick={signInWithGoogle}>
+          <Button buttonType={BUTTON_TYPE_CLASSES.google} type="button" onClick={signInWithGoogle}>
             SIGN IN WITH GOOGLE
           </Button>
-        </div>
+        </ButtonsContainer>
       </form>
-    </div>
+    </SignInFormContainer>
   );
 };
 

@@ -1,28 +1,36 @@
-import "./cart-dropdown.styles.scss";
-import Button from "../button/button.component";
+import {
+  CartDropdownContainer,
+  CartItems,
+  ErrorMessage,
+} from "./cart-dropdown.styles.jsx";
+import Button ,{BUTTON_TYPE_CLASSES} from "../button/button.component";
 import { useContext } from "react";
 import { CartContext } from "../../context/cart.context";
 import CartItem from "../cart-item/cart-item.component";
 import { useNavigate } from "react-router-dom";
 
-const CartDropDown = () =>{
-    const {cartItems} = useContext(CartContext);
-    const navigate = useNavigate();
-    const checkoutHandler = () =>{
-        navigate("/checkout");
-    }
-    return(
-        <div className="cart-dropdown-container">
-        <div className="cart-items">
-        {
-            cartItems.map(cartItem =>{
-                return <CartItem key={cartItem.id} product = {cartItem} />
-            })
-        }
-        </div>
-        <Button buttonType="reverse" onClick={checkoutHandler}>Go To Checkout</Button>
-        </div>
-    );
-}
+const CartDropDown = () => {
+  const { cartItems } = useContext(CartContext);
+  const navigate = useNavigate();
+  const checkoutHandler = () => {
+    navigate("/checkout");
+  };
+  return (
+    <CartDropdownContainer>
+      <CartItems>
+        {cartItems.length ? (
+          cartItems.map((cartItem) => {
+            return <CartItem key={cartItem.id} product={cartItem} />;
+          })
+        ) : (
+          <ErrorMessage>No products Added</ErrorMessage>
+        )}
+      </CartItems>
+      <Button buttonType={BUTTON_TYPE_CLASSES.base} onClick={checkoutHandler}>
+        Go To Checkout
+      </Button>
+    </CartDropdownContainer>
+  );
+};
 
 export default CartDropDown;
