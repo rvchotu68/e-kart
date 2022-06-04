@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext,useEffect, useReducer } from "react";
 import {
   onAuthStateChangedHandler,
   createUserDocumentWithAuth,
@@ -9,16 +9,40 @@ export const Context = createContext({
   setCurrUser: () => {},
 });
 
-const UserContext = ({ children }) => {
-  const [currUser, setCurrUser] = useState(null);
-  const value = { currUser, setCurrUser };
+export const actionType = {
+  setCurrUser: "setCurrUser",
+};
 
-  useEffect(  () => {
+const userReducer = (state, action) => {
+  switch (action.type) {
+    case actionType.setCurrUser:
+      return { ...state, currUser: action.payload };
+
+    default:
+      throw new Error("Error");
+  }
+};
+
+const initialObj = {
+  currUser: null,
+};
+
+const UserContext = ({ children }) => {
+  const [state, dispatch] = useReducer(userReducer, initialObj);
+
+  const setCurrUser = (actionObj) => {
+    dispatch(actionObj);
+  };
+  const value = { state, setCurrUser };
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChangedHandler(async (user) => {
-      // console.log(user);
       if (user) await createUserDocumentWithAuth(user);
 
-      setCurrUser(user);
+      setCurrUser({
+        type: actionType.setCurrUser,
+        payload: user,
+      });
     });
 
     return unsubscribe;

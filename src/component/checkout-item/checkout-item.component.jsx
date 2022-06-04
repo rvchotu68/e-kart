@@ -1,14 +1,27 @@
-import {CheckoutItemContainer,ImageContainer,Name,Quantity,Arrow,Value,Price,RemoveButton}  from "./checkout-item.styles.jsx";
-import { CartContext } from "../../context/cart.context";
-import { useContext } from "react";
+import {
+  CheckoutItemContainer,
+  ImageContainer,
+  Name,
+  Quantity,
+  Arrow,
+  Value,
+  Price,
+  RemoveButton,
+} from "./checkout-item.styles.jsx";
 
-const CheckoutItem = ({ cartItem }) => {
+import {
+  addItemToCart,
+  removeItemFromCart,
+  clearItemFromCart,
+} from "../../store/cart/cart.action.js";
+import { useDispatch } from "react-redux";
+
+const CheckoutItem = ({ cartItem,cartItems }) => {
   const { name, price, imageUrl, qty } = cartItem;
-  const { addItemToCart, removeItemFromCart, clearItemFromCart } =
-    useContext(CartContext);
-  const clearCartItemHandler = () => clearItemFromCart(cartItem);
-  const addItemToCartHandler = () => addItemToCart(cartItem);
-  const removeItemFromCartHandler = () => removeItemFromCart(cartItem);
+  const dispatch = useDispatch();
+  const clearCartItemHandler = () => dispatch(clearItemFromCart(cartItems,cartItem));
+  const addItemToCartHandler = () => dispatch(addItemToCart(cartItems,cartItem));
+  const removeItemFromCartHandler = () =>dispatch(removeItemFromCart(cartItems,cartItem));
 
   return (
     <CheckoutItemContainer>
@@ -17,14 +30,12 @@ const CheckoutItem = ({ cartItem }) => {
       </ImageContainer>
       <Name>{name}</Name>
       <Quantity>
-      <Arrow onClick={removeItemFromCartHandler}>&#10094;</Arrow>
-      <Value>{qty}</Value> 
-      <Arrow onClick={addItemToCartHandler}>&#10095;</Arrow>
+        <Arrow onClick={removeItemFromCartHandler}>&#10094;</Arrow>
+        <Value>{qty}</Value>
+        <Arrow onClick={addItemToCartHandler}>&#10095;</Arrow>
       </Quantity>
-      <Price>{price}</Price>
-      <RemoveButton onClick={clearCartItemHandler}>
-        &#10005;
-      </RemoveButton>
+      <Price>${price}</Price>
+      <RemoveButton onClick={clearCartItemHandler}>&#10005;</RemoveButton>
     </CheckoutItemContainer>
   );
 };

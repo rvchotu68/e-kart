@@ -4,15 +4,18 @@ import {
   ItemCount,
 } from "./shopping-cart-icon.styles";
 
-import { useContext } from "react";
-import { CartContext } from "../../context/cart.context";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setIsCartActive } from "../../store/cart/cart.action";
+import { isCartActiveSelector,cartCountTotalSelector } from "../../store/cart/cart.selector";
 
 const ShoppingCartIcon = () => {
-  const { isCartActive, setIsCartActive, cartItemsCount } =
-    useContext(CartContext);
-
+  // const { isCartActive, setIsCartActive, cartItemsCount } = useContext(CartContext);
+const dispatch = useDispatch();
+  const isCartActive = useSelector(isCartActiveSelector);
+  const cartItemsCount = useSelector(cartCountTotalSelector);
   const clickHandler = () => {
-    setIsCartActive(!isCartActive);
+    dispatch(setIsCartActive(!isCartActive));
   };
 
   return (

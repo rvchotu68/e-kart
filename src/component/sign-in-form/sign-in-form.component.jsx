@@ -1,7 +1,10 @@
-import {SignInFormContainer,ButtonsContainer} from "./sign-in-form.styles.jsx";
+import {
+  SignInFormContainer,
+  ButtonsContainer,
+} from "./sign-in-form.styles.jsx";
 import FormInput from "../form-input/form-input.component";
 import { useState } from "react";
-import Button,{BUTTON_TYPE_CLASSES} from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import {
   signInWithGooglePop,
   signInAuthUsingEmailAndPassword,
@@ -24,8 +27,7 @@ const SignInForm = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
-      const res = await signInAuthUsingEmailAndPassword(email, password);
-      console.log(res);
+      await signInAuthUsingEmailAndPassword(email, password);
     } catch (err) {
       console.log(err.message);
       switch (err.code) {
@@ -79,7 +81,11 @@ const SignInForm = () => {
           <Button buttonType={BUTTON_TYPE_CLASSES.base} type="submit">
             SIGN IN
           </Button>
-          <Button buttonType={BUTTON_TYPE_CLASSES.google} type="button" onClick={signInWithGoogle}>
+          <Button
+            buttonType={BUTTON_TYPE_CLASSES.google}
+            type="button"
+            onClick={signInWithGoogle}
+          >
             SIGN IN WITH GOOGLE
           </Button>
         </ButtonsContainer>

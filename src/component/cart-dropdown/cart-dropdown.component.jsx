@@ -4,13 +4,15 @@ import {
   ErrorMessage,
 } from "./cart-dropdown.styles.jsx";
 import Button ,{BUTTON_TYPE_CLASSES} from "../button/button.component";
-import { useContext } from "react";
-import { CartContext } from "../../context/cart.context";
 import CartItem from "../cart-item/cart-item.component";
 import { useNavigate } from "react-router-dom";
+import {useSelector} from "react-redux";
+import {cartItemsSelector} from "../../store/cart/cart.selector";
+
+
 
 const CartDropDown = () => {
-  const { cartItems } = useContext(CartContext);
+  const  cartItems  = useSelector(cartItemsSelector);
   const navigate = useNavigate();
   const checkoutHandler = () => {
     navigate("/checkout");
